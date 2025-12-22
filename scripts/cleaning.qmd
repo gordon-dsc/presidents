@@ -4,5 +4,101 @@ format: html
 ---
 
 ```{r packages}
+library(tidyverse)
+install.packages("pdftools")
+library(pdftools)
+library(readxl)
+library(googlesheets4)
+install.packages("janitor")
+library(janitor)
+```
+
+```{r}
+#inflation stats by year
+inflation_table <- read_excel("SeriesReport-20251217212958_f58992.xlsx")
+#file.path("SeriesReport-20251217212958_f58992")
+#View(inflation)
+#getwd()
+
+
+
+
+#cleaned data
+inflate <- inflation_table |>
+  slice(11:51) |>
+  row_to_names(row_number = 1) |>
+  mutate(across(c(HALF1, HALF2), as.numeric)) |>
+  mutate(Inflation_Rate = (HALF1+HALF2)/2) |>
+  select(Year, Inflation_Rate)|>
+  mutate(Year = as.integer(Year))
 
 ```
+
+
+```{r}
+#stock market growth
+#stock_market <- https://www.macrotrends.net/1319/dow-jones-100-year-historical-chart
+#data to be web-scraped
+
+
+stock__market <- read.csv("chart_20251219T225445.csv")
+#View(stock__market)
+#getwd()
+
+rows_per_group = 12
+
+stock <- stock__market |>
+  mutate(
+    date_object = mdy(Date),
+    Year = year(date_object)) |>
+  select(Year, Value) |>
+  slice(842:1321) |>
+  group_by(group_id = as.integer(gl(n(), rows_per_group, n()))) |>
+  mutate(Avg_Stock_Value = cummean(Value)) |>
+  select(Year, Avg_Stock_Value)|>
+  slice(12, 24, 36, 48, 60, 72, 84, 96, 108, 120, 132, 144, 156, 168, 180, 192, 204, 216, 228, 240, 252, 264, 276, 288, 300, 312, 324, 336, 348, 360, 372, 384, 396, 408, 420, 432, 444, 456, 468, 480) |>
+  select(Year, Avg_Stock_Value)
+  #group_by(Year)|>
+  #summarize(Avg_Value = mean(Value))
+  #View('stock__market')
+
+stock
+```
+
+```{r}
+gdp_per_capita <- read.csv("United-States-GDP-Per-Capita-GDP-Per-Capita-US-2025-12-20-14-53.csv")
+
+Gdp_Per_Capita <- gdp_per_capita |>
+  rename(Year = X) |>
+  rename(GDP_Per_Capita_Dollars = GDP.Per.Capita) |>
+  add_row(Year = 2024, GDP_Per_Capita_Dollars = 84534.00) |>
+  slice(26:65)
+View(Gdp_Per_Capita)
+```
+
+
+```{r}
+
+#Joined tables
+
+completed_table <- merge(presidents_list_by_year, inflate, all = TRUE)
+completed_table <- merge(completed_table, stock)
+completed_table <- merge(completed_table, pres_wars_started)
+completed_table <- merge(completed_table, Gdp_Per_Capita)
+completed_table <- merge(completed_table, approval_rating)
+completed_table <- merge(completed_table, avg_unemployment_rate)
+completed_table <- merge(completed_table, mean_crime_per_year)
+final_table <-completed_table |>
+  select(-group_id) |>
+  select(-Presidents2)|>
+  relocate(GDP_Per_Capita_Dollars, .before = Inflation_Rate)|>
+  relocate(Year, .before = Presidents)|>
+  relocate(Avg_Approval_Rating_Percent, .after = Presidents) |>
+  relocate(Avg_Unemployment_Rate, .after = Avg_Stock_Value) |>
+  relocate(Avg_Total_Crime, .after = Avg_Unemployment_Rate) |>
+  arrange(Year)
+  
+View(final_table)
+
+```
+

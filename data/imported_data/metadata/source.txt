@@ -1,0 +1,19 @@
+Custom Query Results_11-20-2025.csv
+
+This has the number crime rates in the US by month from January 1985 to December
+2024. This exists from President Reagan's second term through President Biden.
+
+Presidents - Sheet1.csv
+
+This has a list of presidents for the code to be joined through.
+
+https://www.macrotrends.net/1319/dow-jones-100-year-historical-chart
+
+This has the info on the stock market that is webscraped
+
+presidents_wars-Sheet1
+
+This is a list containing the number of wars/conflicts that each of the presidents engaged in.
+
+average_crime:
+https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/explorer/crime/query , Custom Query Results_11-20-2025.csv

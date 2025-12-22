@@ -4,6 +4,162 @@ format: html
 ---
 
 ```{r packages}
+library(tidyverse)
+#install.packages("pdftools")
+library(pdftools)
+library(readxl)
+library(googlesheets4)
+install.packages("janitor")
+library(janitor)
+```
+
+
+
+```{r}
+#crime <- read_csv("C:/Users/Josef Schultz/OneDrive/Documents/Projects/presidents-project/data/imported_data/Custom Query Results_11-20-2025.csv")
+
+#need to add this to the cleaned data file somehow and do all of the cleaning code over there.
+
+#crime |>
+#  slice(1)|>
+ # select(-Date) |>
+#  pivot_longer(-id, names_to = "Year", values_to = "value") |> 
+  # pivot_longer(
+  #  cols = matches("^\\d{2}-\\d{4}$"),
+   # names_to = "Year",
+    #values_to = "Total_Crime") |>
+  #View("crime")
+  #
+  #pivot_longer(-id, names_to = "Year", values_to = "value") |>
+  #mutate(Year = sub(".*-", "", Year))
+
+
+#separate(Year, into = c("Month", "Year"), sep = "-")
+
+mean_crime_per_year <- read_excel("average_crime.xlsx")
+mean_crime_per_year
 
 ```
+
+
+```{r}
+#presidents table from google sheets
+presidents_list_by_year <- read.csv("Presidents - Sheet1.csv")
+presidents_list_by_year
+```
+
+```{r}
+#inflation stats by year
+inflation_table <- read_excel("SeriesReport-20251217212958_f58992.xlsx")
+#file.path("SeriesReport-20251217212958_f58992")
+#View(inflation)
+#getwd()
+
+
+
+
+#cleaned data
+inflate <- inflation_table |>
+  slice(11:51) |>
+  row_to_names(row_number = 1) |>
+  mutate(across(c(HALF1, HALF2), as.numeric)) |>
+  mutate(Inflation_Rate = (HALF1+HALF2)/2) |>
+  select(Year, Inflation_Rate)|>
+  mutate(Year = as.integer(Year))
+
+```
+
+```{r}
+
+#Joined tables
+
+completed_table <- merge(presidents_list_by_year, inflate, all = TRUE)
+completed_table <- merge(completed_table, stock)
+completed_table <- merge(completed_table, pres_wars_started)
+completed_table <- merge(completed_table, Gdp_Per_Capita)
+completed_table <- merge(completed_table, approval_rating)
+completed_table <- merge(completed_table, avg_unemployment_rate)
+completed_table <- merge(completed_table, mean_crime_per_year)
+final_table <- completed_table |>
+  select(-group_id) |>
+  select(-Presidents2)|>
+  relocate(GDP_Per_Capita_Dollars, .before = Inflation_Rate)|>
+  relocate(Year, .before = Presidents)|>
+  relocate(Avg_Approval_Rating_Percent, .after = Presidents) |>
+  relocate(Avg_Unemployment_Rate, .after = Avg_Stock_Value) |>
+  relocate(Avg_Total_Crime, .after = Avg_Unemployment_Rate) |>
+  arrange(Year)
+  
+View(final_table)
+
+```
+
+
+
+
+
+
+```{r}
+#stock market growth
+#stock_market <- https://www.macrotrends.net/1319/dow-jones-100-year-historical-chart
+#data to be web-scraped
+
+
+stock__market <- read.csv("chart_20251219T225445.csv")
+#View(stock__market)
+#getwd()
+
+rows_per_group = 12
+
+stock <- stock__market |>
+  mutate(
+    date_object = mdy(Date),
+    Year = year(date_object)) |>
+  select(Year, Value) |>
+  slice(842:1321) |>
+  group_by(group_id = as.integer(gl(n(), rows_per_group, n()))) |>
+  mutate(Avg_Stock_Value = cummean(Value)) |>
+  select(Year, Avg_Stock_Value)|>
+  slice(12, 24, 36, 48, 60, 72, 84, 96, 108, 120, 132, 144, 156, 168, 180, 192, 204, 216, 228, 240, 252, 264, 276, 288, 300, 312, 324, 336, 348, 360, 372, 384, 396, 408, 420, 432, 444, 456, 468, 480) |>
+  select(Year, Avg_Stock_Value)
+  #group_by(Year)|>
+  #summarize(Avg_Value = mean(Value))
+  #View('stock__market')   #cleaned except can't get rid of group_id column
+
+stock
+```
+
+```{r}
+pres_wars_started <- read_excel("C:/Users/Josef Schultz/OneDrive/Documents/Projects/presidents-project/scripts/presidents_military_conflicts_initiated.xlsx")
+pres_wars_started
+#getwd()
+```
+
+```{r}
+gdp_per_capita <- read.csv("United-States-GDP-Per-Capita-GDP-Per-Capita-US-2025-12-20-14-53.csv")
+
+Gdp_Per_Capita <- gdp_per_capita |>
+  rename(Year = X) |>
+  rename(GDP_Per_Capita_Dollars = GDP.Per.Capita) |>
+  add_row(Year = 2024, GDP_Per_Capita_Dollars = 84534.00) |>
+  slice(26:65)
+View(Gdp_Per_Capita)
+```
+
+
+
+```{r}
+approval_rating <- read_excel("average_presidents_approval_ratings.xlsx")
+approval_rating
+#getwd()
+```
+
+
+```{r}
+avg_unemployment_rate <- read_excel("unemployment_rate.xlsx")
+avg_unemployment_rate
+```
+
+
+
 
