@@ -1,0 +1,4 @@
+Data File Name = chart_20251219T225445.csv
+
+Cleaning Script = Cleaning Script = C:/Users/Josef Schultz/OneDrive/Documents/
+Projects/presidents-project/scripts/cleaning.qmd

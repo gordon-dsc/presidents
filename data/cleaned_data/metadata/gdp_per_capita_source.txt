@@ -1,0 +1,5 @@
+Data File Name = United-States-GDP-Per-Capita-GDP-Per-Capita-US-2025
+-12-20-14-53.csv
+
+Cleaning Script = C:/Users/Josef Schultz/OneDrive/Documents/Projects/presidents-
+project/scripts/cleaning.qmd
