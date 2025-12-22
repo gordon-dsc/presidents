@@ -1,0 +1,4 @@
+Data File Name = final_data.csv
+
+Cleaning Script = C:/Users/Josef Schultz/OneDrive/Documents/
+Projects/presidents-project/output/final_data.csv

@@ -1,0 +1,30 @@
+---
+title: "final_table_project"
+format: html
+---
+
+```{r}
+
+#Joined tables
+
+completed_table <- merge(presidents_list_by_year, inflate, all = TRUE)
+completed_table <- merge(completed_table, stock)
+completed_table <- merge(completed_table, pres_wars_started)
+completed_table <- merge(completed_table, Gdp_Per_Capita)
+completed_table <- merge(completed_table, approval_rating)
+completed_table <- merge(completed_table, avg_unemployment_rate)
+completed_table <- merge(completed_table, mean_crime_per_year)
+final_table <-completed_table |>
+  select(-group_id) |>
+  select(-Presidents2)|>
+  relocate(GDP_Per_Capita_Dollars, .before = Inflation_Rate)|>
+  relocate(Year, .before = Presidents)|>
+  relocate(Avg_Approval_Rating_Percent, .after = Presidents) |>
+  relocate(Avg_Unemployment_Rate, .after = Avg_Stock_Value) |>
+  relocate(Avg_Total_Crime, .after = Avg_Unemployment_Rate) |>
+  arrange(Year)|>
+  write.csv("final_data.csv", row.names = FALSE)
+  
+View(final_table)
+
+```

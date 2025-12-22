@@ -1,0 +1,11 @@
+unemployment_rate.xlsx
+
+The data was taken from MacroTrends. The data was manually entered into an excel
+sheet and then imported into rstudio.
+
+https://www.macrotrends.net/datasets/1316/us-national-unemployment-rate
+
+Date Accessed = December 19th, 2025
+
+Import Script = C:/Users/Josef Schultz/OneDrive/Documents/Projects/presidents-
+project/scripts/import.qmd
