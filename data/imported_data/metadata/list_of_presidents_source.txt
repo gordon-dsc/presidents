@@ -1,0 +1,11 @@
+Presidents - Sheet1.csv
+
+The data comes from The White House Historical Association. I put the data onto
+a google sheet to be imported into rstudio.
+
+https://www.whitehousehistory.org/the-presidents-timeline
+
+Date Accessed = December 5th, 2025.
+
+Import Script = C:/Users/Josef Schultz/OneDrive/Documents/Projects/presidents-
+project/scripts/import.qmd

@@ -1,0 +1,14 @@
+average_crime.xlsx
+
+This data came from FBI Crime Data Explorer. The information uses custom query
+results that were set to: January, 1985 - December 2024, All Violent Crimes,
+All Property Crimes, United States. I manually put the data onto an excel sheet,
+with the values being the mean of the crime for each year rounded to no decimal
+places.
+
+https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/explorer/crime/query
+
+Date Accessed = November 25, 2025.
+
+Import Script = C:/Users/Josef Schultz/OneDrive/Documents/Projects/presidents-
+project/scripts/import.qmd

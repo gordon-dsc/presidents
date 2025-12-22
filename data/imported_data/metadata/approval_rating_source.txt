@@ -1,0 +1,12 @@
+average_presidents_approval_ratings.xlsx
+
+The data comes from Wikipedia. The Average Approval Rating for each president
+across their presidency was put into an excel sheet that was then imported onto
+rstudio.
+
+https://en.wikipedia.org/wiki/United_States_presidential_approval_rating
+
+Date Accessed = December 20th, 2025
+
+Import Script = C:/Users/Josef Schultz/OneDrive/Documents/Projects/presidents-
+project/scripts/import.qmd
